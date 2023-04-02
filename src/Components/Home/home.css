@@ -1,0 +1,75 @@
+.home_content
+{
+    width: 70%;
+    margin: auto;
+    margin-top: 200px;
+}
+
+@media only screen and (max-width: 992px)
+{
+    .home_content
+    {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 788px)
+{
+    .home_content
+    {
+        margin-top: 175px;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 568px)
+{
+    .home_content
+    {
+        margin: auto;
+        margin-top: 100px;
+        width: 70%;
+    }
+}
+
+.homecontentforsurvey
+{
+    display: inline;
+}
+
+.display_box_survey
+{
+    width: 250px;
+    height: 175px;
+    background-color: rgb(214, 154, 24);
+    border-radius: 10px;
+    text-align: center;
+    padding: 35px 0px;
+    font-size: 60px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.display_box_quiz
+{
+    width: 250px;
+    height: 175px;
+    background-color: rebeccapurple;
+    border-radius: 10px;
+    text-align: center;
+    padding: 35px 0px;
+    font-size: 60px;
+    color: #fff;
+    cursor: pointer;
+}
+
+
+.home_content h4
+{
+    margin-left: 40px;
+}
+
+.contentlink
+{
+    text-decoration: none;
+}

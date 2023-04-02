@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './createform.css'
-import Add_Question from '../AddQuestion/Add_Question';
+import Add_Question from './AddQuestion/Add_Question';
 
 export default function Create_Form() {
 
@@ -40,13 +40,6 @@ export default function Create_Form() {
             }
         }
     }, [description])
-
-
-    var listOptions = ['option1', 'option2', 'option3', 'option4', 'option5',
-        'option6', 'option7', 'option8', 'option9', 'option10',
-        'option11', 'option12', 'option13', 'option14', 'option15',
-        'option16', 'option17', 'option18', 'option19', 'option20',
-        'option21', 'option22', 'option23', 'option24', 'option25'];
 
     const HandleQuestionTitleDisability = () => {
         setdisableQuestionTitle(false);
