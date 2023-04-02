@@ -1,3 +1,8 @@
+body 
+{
+    height: 100vh;
+}
+
 .headinggroup
 {
     width: 100%;
@@ -5,9 +10,10 @@
     min-height: 150px;
     background-color: rgb(116, 142, 116);
     border-radius: 10px;
-    margin-top: 50px;
+    margin-top: 20px;
     position: relative;
     word-break: break-all;
+    color: #fff;
 }
 
 .headinggroup h2
@@ -58,6 +64,12 @@
     border: 2px solid #000;
     border-radius: 10px;
     padding: 10px 20px;
+    margin: 10px 10px;
+}
+
+.questionremove
+{
+    float: right;
 }
 
  .questionName
@@ -70,6 +82,51 @@
     width: 100%;
     margin: auto;
     margin-top: 20px;
-    max-height: 10000px;
+    max-height: 500px;
     height: auto;
+}
+
+.questionType
+{
+    height: 35px;
+    margin: 10px;
+}
+
+.questionType select
+{
+    width: 20%;
+    float: right;
+}
+
+.addOption
+{
+    height: 60px;
+}
+
+.addOption button
+{
+    float: right;
+    cursor: pointer;
+    height: 40px;
+}
+
+.optionvalue
+{
+    width: 85%;
+    margin: 5px;
+    height: 40px;
+    border: 2px solid #000;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    display: inline-flex;
+}
+
+.removeoption
+{
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: rgb(243, 23, 23);
+    color: #fff;
+    border: none;
 }

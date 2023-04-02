@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import '../authenticate.css'
 import { Link } from 'react-router-dom';
 import { CheckAdminCred, AuthenticateUser, AuthenticateVolunteer, AuthenticateOrg } from '../Service/AuthenticationService';
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
 
@@ -13,7 +13,7 @@ export default function Login() {
   const [Errormessage, setErrormessage] = useState("")
   const [successmessage, setsuccessmessage] = useState("")
 
-  // var navigate = useNavigate();
+  var navigate = useNavigate();
 
   useEffect(() => {
     setemail("")
@@ -40,7 +40,7 @@ export default function Login() {
     setpassworderror("")
     CheckAdminCred(email, password)
       .then((resp) => {
-        // navigate("/admin");
+        navigate("/home");
         console.log("admin login");
       })
     console.log(email,password);
@@ -52,11 +52,10 @@ export default function Login() {
         else {
           if (userdetails.data.status == "Success") {
             setsuccessmessage("Successfully logged in")
-            localStorage.setItem('details', JSON.stringify(userdetails.data.details))
+            localStorage.setItem('userdetails', JSON.stringify(userdetails.data.details))
             console.log(userdetails.data.details);
             setErrormessage("")
-            // navigate("/user");
-            console.log("User Login");
+            navigate("/");
           }
           else {
             setErrormessage("Invalid Credentials");
@@ -69,9 +68,6 @@ export default function Login() {
         setErrormessage("Invalid Credentials");
         setsuccessmessage("")
       })
-
-
-
   }
 
   const ValidateEmail = () => {

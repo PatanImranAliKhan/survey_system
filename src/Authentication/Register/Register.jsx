@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import '../authenticate.css'
 import { Link } from 'react-router-dom';
 import { PostUserDetails } from '../Service/AuthenticationService';
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [username, setusername] = useState("")
@@ -20,7 +20,7 @@ export default function Register() {
   const [Errormessage, setErrormessage] = useState("")
   const [successmessage, setsuccessmessage] = useState("")
 
-  // var navigate = useNavigate();
+  var navigate = useNavigate();
 
   useEffect(() => {
     setusername("")
@@ -71,7 +71,7 @@ export default function Register() {
         else {
           // localStorage.setItem("details",resp.data.details)
           // setsuccessmessage("Successfully Registered")
-          // navigate("/");
+          navigate("/login");
           setErrormessage("");
           setsuccessmessage("Successfully registered")
         }
