@@ -17,6 +17,9 @@ app.use(express.json())
 const userRoute = require('./routes/userRoute')
 app.use('/user',userRoute)
 
+const surveyRouter = require('./routes/SurveyRoute');
+app.use('/survey', surveyRouter);
+
 app.listen(9000,()=>{
     console.log('Server started at port 9000')
 })

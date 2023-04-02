@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react'
 import './createform.css'
 import Add_Question from './AddQuestion/Add_Question';
+import { postSurvey } from '../Service/survey_service';
+import Header from '../Header/Header';
+import { useNavigate } from "react-router-dom";
 
 export default function Create_Form() {
 
     const sampleQuestion = {
-        description : "",
-        questionType : "text",
-        options : ["","","",""]
+        description: "",
+        questionType: "text",
+        options: ["", "", "", ""]
     };
 
     const [questionsList, setquestionsList] = useState([{
-        description : "",
-        questionType : "text",
-        options : ["","","",""]
+        description: "",
+        questionType: "text",
+        options: ["", "", "", ""]
     }])
+
+    var navigate = useNavigate();
 
     const [disableQuestionTitle, setdisableQuestionTitle] = useState(true)
     const [QuestionTitle, setQuestionTitle] = useState("");
@@ -24,9 +29,28 @@ export default function Create_Form() {
     const descriptionRef = useRef()
     const [description, setdescription] = useState("")
 
+    const [successmessage, setsuccessmessage] = useState("")
+    const [errormessage, seterrormessage] = useState("")
+
+    const [dateOfExpiry, setdateOfExpiry] = useState(new Date());
+    const [dateOfExpiryFormatted, setdateOfExpiryFormatted] = useState(new Date());
+
+    const [userDetails, setuserDetails] = useState()
+
+    const changeDate = (e) => {
+        setdateOfExpiry(e.target.value);
+        setdateOfExpiryFormatted(new Date(e.target.value));
+    }
+
     const onChangeDescription = (e) => {
         setdescription(e.target.value);
     }
+
+    useEffect(() => {
+        const user_local_details = JSON.parse(localStorage.getItem('userdetails'));
+        setuserDetails(user_local_details)
+    }, [])
+    
 
     useEffect(() => {
         if (descriptionRef && descriptionRef.current) {
@@ -52,7 +76,6 @@ export default function Create_Form() {
         const dup_ques = [...questionsList];
         dup_ques.push(sampleQuestion)
         setquestionsList(dup_ques);
-        console.log(dup_ques);
     }
 
     const changeQuestionDescription = (ind, val) => {
@@ -84,12 +107,10 @@ export default function Create_Form() {
     const filterOptions = (ques_dup) => {
         var filtered_result = []
         ques_dup.forEach((element) => {
-            if(element.questionType=="radio" || element.questionType=="check")
-            {
+            if (element.questionType == "radio" || element.questionType == "check") {
                 element.options = element.options.filter((item) => {
-                    return item!=""
+                    return item != ""
                 })
-                console.log("options : "+element.options);
             }
             filtered_result.push(element);
         })
@@ -99,15 +120,13 @@ export default function Create_Form() {
     const Add_options_as_Constraints = (ques) => {
         ques.map((item) => {
             var survey_response = {};
-            if(item.questionType=="radio" || item.questionType=="check")
-            {
+            if (item.questionType == "radio" || item.questionType == "check") {
                 item.options.forEach((element) => {
-                    survey_response[element]=0;
+                    survey_response[element] = 0;
                 })
             }
-            else
-            {
-                survey_response['responses']=[];
+            else {
+                survey_response['responses'] = [];
             }
             item['survey_response'] = survey_response;
             return item;
@@ -118,25 +137,18 @@ export default function Create_Form() {
     const SubmitQuestions = () => {
         var ques_dup = [...questionsList];
         ques_dup = ques_dup.filter((item) => {
-            console.log("item  ",item.description==null , "  abc ",item.description=="");
-            return item.description!=""
+            return item.description != ""
         })
-        if(ques_dup.length!=questionsList.length)
-        {
+        if (ques_dup.length != questionsList.length) {
             alert("some Descriptions are missing Please fill it out")
             return;
         }
-        if(ques_dup.length==0)
-        {
+        if (ques_dup.length == 0) {
             questionsList.push(sampleQuestion);
             window.alert("Please Fill the Questions Again, We found it with Empty Questions Added");
         }
-        console.log("before filter opt : "+ques_dup);
         ques_dup = filterOptions(ques_dup);
-        console.log("After filter opt");
-        printdata(ques_dup)
-        console.log(Add_options_as_Constraints(ques_dup));
-        ques_dup=Add_options_as_Constraints(ques_dup);
+        ques_dup = Add_options_as_Constraints(ques_dup);
         setquestionsList(ques_dup);
         setTimeout(() => {
             postQuestionsToDB();
@@ -144,24 +156,61 @@ export default function Create_Form() {
     }
 
     const postQuestionsToDB = () => {
+        const dt = new Date();
         const objPost = {
             "title": QuestionTitle,
             "description": description,
-            "questions": questionsList
+            "questions": questionsList,
+            "isActive": true,
+            "dateOfCreation":dt,
+            "dateOfExpiry": dateOfExpiryFormatted,
+            "createdBy": userDetails.email
         }
         console.log(objPost);
+        postSurvey(objPost)
+        .then((surveyResponse) => {
+            console.log(surveyResponse);
+            if(surveyResponse.data.status == "Success")
+            {
+                setsuccessmessage("Submitted Succesfully");
+                seterrormessage("")
+                setquestionsList(sampleQuestion);
+            }
+            else
+            {
+                seterrormessage("failed to Save the Survey, Please try After some time");
+                setsuccessmessage("")
+            }
+        })
+        .catch((err) => {
+            seterrormessage("failed to Save the Survey, Please try After some time");
+            setsuccessmessage("")
+        })
     }
 
-    const printdata = (ques) => {
-        for(let i=0;i<ques.length;i++)
-        {
-            console.log(ques[i].description+ " "+ ques[i].questionType + "  "+ ques[i].options);
-            console.log(ques[i].survey_response);
-        }
+    const cancelForm = () => {
+        navigate("/")
     }
 
     return (
         <div>
+            <Header />
+            {
+                errormessage ?
+                    <div>
+                        <div className="alert alert-danger">
+                            {errormessage}
+                        </div>
+                    </div>
+                    : ""}
+            {
+                successmessage ?
+                    <div>
+                        <div className="alert alert-success">
+                            {successmessage}
+                        </div>
+                    </div>
+                    : ""}
             <div className='container'>
                 <div>
                     <div className='headinggroup'>
@@ -170,7 +219,7 @@ export default function Create_Form() {
                 </div>
                 <br />
                 <div>
-                    <div className='form-group' onClick={() => {HandleQuestionTitleDisability()}}>
+                    <div className='form-group' onClick={() => { HandleQuestionTitleDisability() }}>
                         <input className='form-control' placeholder='Survey Form Name' disabled={disableQuestionTitle} value={QuestionTitle} ref={inputRef}
                             onBlur={() => { setdisableQuestionTitle(true) }}
                             onChange={(e) => { setQuestionTitle(e.target.value) }} required />
@@ -178,18 +227,22 @@ export default function Create_Form() {
                     <br />
                     <div className='fomr-group'>
                         <textarea className='form-control description' ref={descriptionRef}
-                            onChange={(e) => {onChangeDescription(e)}} placeholder='Enter the description of the Survey'>
+                            onChange={(e) => { onChangeDescription(e) }} placeholder='Enter the description of the Survey'>
                             {description}
                         </textarea>
                     </div>
                 </div>
                 <br />
+                <div className='form-group'>
+                    <label>Date of Expiry: </label>
+                    <input type='date' className='form-control' style={{width: '250px'}} value={dateOfExpiry} onChange={(e) => {  changeDate(e) }} />
+                </div>
                 <div>
                     {
                         questionsList.map((ques, i) =>
                             <Add_Question key={i} changeQuestionDescription={changeQuestionDescription} index={i} question={ques}
-                                changeQuestionOptions={changeQuestionOptions} changeQuestionType={changeQuestionType} 
-                                deleteQuestion={deleteQuestion}/>
+                                changeQuestionOptions={changeQuestionOptions} changeQuestionType={changeQuestionType}
+                                deleteQuestion={deleteQuestion} />
                         )
                     }
                 </div>
@@ -199,9 +252,9 @@ export default function Create_Form() {
                 </div>
                 <div>
                     <div className="col-md-12 text-center">
-                        <button type="button" className="btn btn-primary" onClick={() => {SubmitQuestions()}}>Submit</button>
+                        <button type="button" className="btn btn-primary" onClick={() => { SubmitQuestions() }}>Submit</button>
                         &nbsp;&nbsp;
-                        <button type="button" className="btn btn-warning">Cancel</button>
+                        <button type="button" className="btn btn-warning" onClick={() => { cancelForm() }}>Cancel</button>
                     </div>
                 </div>
             </div>

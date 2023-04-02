@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../authenticate.css'
 import { Link } from 'react-router-dom';
-import { CheckAdminCred, AuthenticateUser, AuthenticateVolunteer, AuthenticateOrg } from '../Service/AuthenticationService';
+import { CheckAdminCred, AuthenticateUser } from '../Service/AuthenticationService';
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
