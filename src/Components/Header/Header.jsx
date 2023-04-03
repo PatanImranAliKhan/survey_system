@@ -43,7 +43,7 @@ export default function Header() {
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul className="navbar-nav">
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/create_survey">Surveys</Link>
+                                        <Link className="nav-link" to="/survey_list">Surveys</Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/create_survey">Quizzes</Link>

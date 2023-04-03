@@ -155,7 +155,7 @@ export default function Create_Form() {
         }, 100);
     }
 
-    const postQuestionsToDB = () => {
+    const postQuestionsToDB = async() => {
         const dt = new Date();
         const objPost = {
             "title": QuestionTitle,
@@ -167,7 +167,7 @@ export default function Create_Form() {
             "createdBy": userDetails.email
         }
         console.log(objPost);
-        postSurvey(objPost)
+        await postSurvey(objPost)
         .then((surveyResponse) => {
             console.log(surveyResponse);
             if(surveyResponse.data.status == "Success")

@@ -51,6 +51,27 @@ router.get('/login/:email/:password',async (req,res)=>{
 })
 
 
+router.get('/getallusers',async (req,res)=>{
+
+    try{
+       const user =  await userModel.find()
+       res.setHeader("Content-Type", "application/json");
+       if(user==null){
+        console.log("notfound");
+            return res.status(404).json({status : "Error"});
+       }
+       else{
+            return res.status(200).json({status : "Success",details:user});
+          
+       }
+    }
+    catch(err){
+        res.json({
+            "status":"Error"
+        })
+    }
+})
+
 router.put('/update/:email',async (req,res)=>{
     try{
         await userModel.findByIdAndUpdate(req.params.email,{
