@@ -4,6 +4,8 @@ const SurveyModel = require('../Models/SurveyModel');
 
 const surveyRouter = express.Router();
 
+const cron = require('node-cron');
+
 surveyRouter.route('/post').post(async(req,res,next) => {
     const survey = new SurveyModel(req.body);
     await survey.save()
@@ -118,5 +120,35 @@ surveyRouter.route("/delete/:id").delete(async(req,res,next) => {
         console.log(resp);
     })
 })
+
+cron.schedule("0 0 0 * * *", async function() {
+    var today = new Date();
+    await SurveyModel.find({isActive: true})
+    .then((resp) => {
+        if(resp==[])
+        {
+            return;
+        }
+        resp.forEach((item, i) => {
+            if(new Date(item.dateOfCreation) - today)
+            {
+                makeInActiveSurvey(item._id);
+            }
+        })
+    })
+});
+
+async function makeInActiveSurvey(id)
+{
+    await SurveyModel.findByIdAndUpdate(id, {
+        isActive: false
+    })
+    .then((resp) => {
+        console.log("updated is Activate ");
+        console.log(resp);
+    })
+}
+
+// 0 0 0 * * *
 
 module.exports = surveyRouter;

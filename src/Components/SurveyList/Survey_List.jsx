@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllSurveyDetails, changeActiveStatus } from '../Service/survey_service';
+import { getAllSurveyDetails } from '../Service/survey_service';
 import Header from '../Header/Header';
 import './surveylist.css';
 import { useNavigate } from "react-router-dom";
@@ -23,28 +23,11 @@ export default function Survey_List() {
             console.log(resp);
             setuserServeyDetails(resp.data.response.surveyDetailsOfUser);
             setothersServeyDetails(resp.data.response.surveyDetailsOfOthers);
-            // FilterActiveSurveys(resp.data.response.surveyDetailsOfOthers,email);
         })
         .catch((err) => {
             setuserServeyDetails([]);
             setothersServeyDetails([]);
         })
-    }
-
-    const FilterActiveSurveys = (surveyDetails,email) => {
-        const today = new Date();
-        var isAnyDeactivecalls = false;
-        surveyDetails.forEach(async (element) => {
-            if(today - new Date(element.dateOfCreation) < 0)
-            {
-                await changeActiveStatus(element._id,false);
-                isAnyDeactivecalls=true;
-            }
-        })
-        if(isAnyDeactivecalls)
-        {
-            getSurveyDetail(email);
-        }
     }
 
     const clickCreateForm = () => {
