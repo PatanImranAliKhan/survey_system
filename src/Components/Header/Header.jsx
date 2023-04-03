@@ -6,6 +6,7 @@ import './header.css'
 export default function Header() {
 
     const [loginStatus, setloginStatus] = useState(false)
+    const [username, setusername] = useState("")
 
     useEffect(() => {
         const user_local_details = JSON.parse(localStorage.getItem('userdetails'));
@@ -15,6 +16,7 @@ export default function Header() {
         }
         else {
             setloginStatus(true);
+            setusername(user_local_details.username);
         }
     }, [])
 
@@ -45,11 +47,14 @@ export default function Header() {
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/survey_list">Surveys</Link>
                                     </li>
-                                    <li className="nav-item">
+                                    {/* <li className="nav-item">
                                         <Link className="nav-link" to="/create_survey">Quizzes</Link>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item">
                                         <span className="nav-link" onClick={() => { logout() }}>Logout</span>
+                                    </li>
+                                    <li className="nav-item">
+                                        <span className="nav-link" style={{color: '#000'}}>{username}</span>
                                     </li>
                                 </ul>
                             </div>

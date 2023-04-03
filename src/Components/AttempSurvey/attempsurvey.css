@@ -72,18 +72,36 @@ body
     float: right;
 }
 
- .questionName
+ .questionAnswer
 {
     min-height: 50px;
     border: 2px solid #000;
-    border-top: 1px;
-    border-right: 1px;
-    border-left: 1px;
+    border-top: 1px solid #000;
+    border-right: 1px solid #000;
+    border-left: 1px solid #000;
     width: 100%;
     margin: auto;
     margin-top: 20px;
     max-height: 500px;
     height: auto;
+}
+
+.displayoption
+{
+    display: inline-flex;
+    margin: 5px;
+}
+
+.optiontype
+{
+    width: 20px;
+    height: 20px;
+}
+
+.optionlabel
+{
+    width: 100%;
+    word-break: break-all;
 }
 
 .questionType

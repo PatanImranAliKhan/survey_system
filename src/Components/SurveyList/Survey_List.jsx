@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllSurveyDetails } from '../Service/survey_service';
+import { getAllSurveyDetails, changeActiveStatus } from '../Service/survey_service';
 import Header from '../Header/Header';
 import './surveylist.css';
 import { useNavigate } from "react-router-dom";
@@ -14,31 +14,45 @@ export default function Survey_List() {
 
     useEffect(() => {
         const user_local_details = JSON.parse(localStorage.getItem('userdetails'));
-        getAllSurveyDetails(user_local_details.email)
-            .then((resp) => {
-                console.log(resp);
-                setuserServeyDetails(resp.data.response.surveyDetailsOfUser);
-                setothersServeyDetails(resp.data.response.surveyDetailsOfOthers);
-            })
-            .catch((err) => {
-                setuserServeyDetails([]);
-                setothersServeyDetails([]);
-            })
+        getSurveyDetail(user_local_details.email);
     }, [])
+
+    const getSurveyDetail = async (email) => {
+        await getAllSurveyDetails(email)
+        .then((resp) => {
+            console.log(resp);
+            setuserServeyDetails(resp.data.response.surveyDetailsOfUser);
+            setothersServeyDetails(resp.data.response.surveyDetailsOfOthers);
+            // FilterActiveSurveys(resp.data.response.surveyDetailsOfOthers,email);
+        })
+        .catch((err) => {
+            setuserServeyDetails([]);
+            setothersServeyDetails([]);
+        })
+    }
+
+    const FilterActiveSurveys = (surveyDetails,email) => {
+        const today = new Date();
+        var isAnyDeactivecalls = false;
+        surveyDetails.forEach(async (element) => {
+            if(today - new Date(element.dateOfCreation) < 0)
+            {
+                await changeActiveStatus(element._id,false);
+                isAnyDeactivecalls=true;
+            }
+        })
+        if(isAnyDeactivecalls)
+        {
+            getSurveyDetail(email);
+        }
+    }
 
     const clickCreateForm = () => {
         navigate("/create_survey")
     }
 
     const navigateToLink = (id) => {
-        const secretpass = "survey system is the good project";
-        const data = CryptoJS.AES.encrypt(
-            JSON.stringify(id),
-            secretpass
-        ).toString();
-        console.log(data);
-
-        navigate(`/attempSurvey/${data.toString()}`);
+        navigate(`/attempSurvey/${id}`);
     }
 
 
@@ -54,8 +68,9 @@ export default function Survey_List() {
                 <div>
                     {
                         userServeyDetails.length == 0 ?
-                            <div className='jumbotron'>
-                                <div>
+                            <div >
+                                <br />
+                                <div className='jumbotron'>
                                     <b>You have not created any Surveys</b>
                                 </div>
                             </div>
@@ -75,7 +90,7 @@ export default function Survey_List() {
                                                 <tr>
                                                     <th scope="row">{ind + 1}</th>
                                                     <td>{data.title}</td>
-                                                    <td onClick={() => {navigateToLink(data._id)}}>{data._id}</td>
+                                                    <td onClick={() => { navigateToLink(data._id) }}><i class="fa fa-external-link-square" aria-hidden="true"></i></td>
                                                 </tr>
                                             </tbody>
                                         })
@@ -105,7 +120,7 @@ export default function Survey_List() {
                                                 <tr>
                                                     <th scope="row">{ind + 1}</th>
                                                     <td>{data.title}</td>
-                                                    <td onClick={() => {navigateToLink(data._id)}}>{data._id}</td>
+                                                    <td onClick={() => { navigateToLink(data._id) }}><i class="fa fa-external-link-square" aria-hidden="true"></i></td>
                                                 </tr>
                                             </tbody>
                                         })
@@ -114,8 +129,9 @@ export default function Survey_List() {
                                 </table>
                             </div>
                             :
-                            <div className='jumbotron'>
-                                <div>
+                            <div >
+                                <br />
+                                <div className='jumbotron'>
                                     <b>There is no Others Survey Forms</b>
                                 </div>
                             </div>

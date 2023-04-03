@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import CryptoJS from 'crypto-js';
-import { getOneSurveyDetails } from '../Service/survey_service';
+import { getOneSurveyDetails, UpdateSurveyByFillingByUsers } from '../Service/survey_service';
 import Header from '../Header/Header';
-import './attempsurvey.css'
+import './attempsurvey.css';
+import Attemp_Question from './Attemp_Question';
+import { useNavigate } from "react-router-dom";
+import Attemp_Question_With_Options from './Attemp_Question_With_Options';
 
 export default function Attemp_Survey() {
 
@@ -11,108 +13,156 @@ export default function Attemp_Survey() {
     const [surveyId, setsurveyId] = useState(0);
     const { id_data } = useParams();
 
-    useEffect(() => {
-        const secretpass = "survey system is the good project";
-        const bytes = CryptoJS.AES.decrypt(id_data, secretpass);
-        const decdata = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-        setsurveyId(decdata);
+    const [responses, setresponses] = useState([]);
+    
+    var navigate = useNavigate();
 
-        getOneSurveyDetails(decdata)
+    useEffect(() => {
+        setsurveyId(id_data);
+        getSurveyDetailsFormDB();
+    }, [])
+
+    const getSurveyDetailsFormDB = async () => {
+        await getOneSurveyDetails(id_data)
             .then((resp) => {
-                console.log("resp : "+resp.data.details);
+
                 if (resp.data.status != "Success") {
                     setsurveyDetails([]);
                 }
                 else {
-                    setsurveyDetails(resp.data);
+                    console.log(resp.data.details);
+                    setsurveyDetails(resp.data.details);
+                    setresponsesdatatoQuestions(resp.data.details.questions)
                 }
             })
             .catch((err) => {
                 console.log("error");
                 setsurveyDetails([]);
             })
-        setTimeout(() => {
-            console.log(surveyDetails);
-        }, 1000);
-    }, [])
+
+    }
+
+    const setresponsesdatatoQuestions = (ques) => {
+        setresponses([]);
+        var ress=[]
+        var n=ques.length;
+        for(let i=0;i<n;i++)
+        {
+            if(ques.questionType=="checkbox")
+            {
+                ress.push([]);
+            }
+            else
+            {
+                ress.push("");
+            }
+        }
+        setresponses(ress);
+    }
 
     const descriptionRef = useRef();
-    const questionDescRef = useRef();
+
+    const AddResponsesToQuestions = (ind, answer) => {
+        const dup_resp = [... responses]
+        dup_resp[ind]=answer;
+        setresponses(dup_resp);
+    }
+
+    const cancelPage = () => {
+        navigate(-1);
+    }
+
+    const SubmitHandler = () => {
+        var ques = [...surveyDetails['questions']];
+        ques = ques.map((item, i) => {
+
+            if(item.questionType=="checkbox")
+            {
+                item.survey_response=item.survey_response.concat(responses[i]);
+            }
+            else
+            {
+                item.survey_response.push(responses[i]);
+            }
+            return item;
+        })
+        console.log(ques);
+        UpdateSurveyByFillingByUsers(surveyDetails._id, ques)
+        .then((resp) => {
+            console.log(resp);
+        })
+        .catch((err) => {
+            console.log("err");
+        })
+    }
 
 
     return (
         <div>
             <Header />
             <div className='container'>
-                {/* <div>
+                <div>
 
                 </div>
                 {
-                    surveyDetails.length == 0 ? "" :
+                    surveyDetails == {} ? "" :
                         <div className='container'>
                             <div>
                                 <div className='headinggroup'>
-                                    <h2>{surveyDetails[0].title}</h2>
+                                    <h2>{surveyDetails.title}</h2>
                                 </div>
                             </div>
                             <br />
                             <div>
                                 <div className='fomr-group'>
-                                    <textarea className='form-control description' ref={descriptionRef}>
-                                        {surveyDetails[0].description}
+                                    <textarea className='form-control description' ref={descriptionRef} value={surveyDetails.description} disabled>
                                     </textarea>
                                 </div>
                             </div>
                             <br />
                             <div>
-                                {surveyDetails[0].questions}
                                 {
-                                    surveyDetails.questions.map((ques, i) =>
-                                        <div>
-                                            <b>Question : {i + 1}</b>
-                                            <div className='questionbox'>
-
-                                                <textarea className='form-control questionName' ref={questionDescRef}>
-                                                    {ques.description}
-                                                </textarea>
+                                    surveyDetails.questions!="" && surveyDetails.questions!=null && surveyDetails.questions!=[]?
+                                            surveyDetails.questions.map((ques, i) =>
                                                 <div>
-                                                    {
-                                                        ques.questionType == "radio" || ques.questionType == "check" ?
-                                                            <div className='form-group'>
-                                                                <div className='row'>
-                                                                    {
-                                                                        ques.options.map((e, i) =>
-                                                                            <div className='col-sm-12 col-lg-6'>
-                                                                                <div key={e} >
-                                                                                    <input type={ques.questionType} />
-                                                                                </div>
-                                                                            </div>
-                                                                        )
-                                                                    }
-                                                                </div>
-                                                            </div>
-                                                            :
-                                                            <div>
-                                                                <input type={ques.questionType} />
-                                                            </div>
-                                                    }
+                                                    <b>Question : {i + 1}</b>
+                                                    <div className='questionbox'>
+                                                        <b>Question Description: </b>
+                                                        <br />
+                                                        <label style={{margin: '10px 20px'}}>
+                                                            {ques.description}
+                                                        </label>
+                                                        <br />
+                                                        <b>Answer: </b>
+                                                        <div>
+                                                            {
+                                                                ques.questionType == "radio" || ques.questionType == "checkbox" ?
+                                                                    <div className='form-group'>
+                                                                        <Attemp_Question_With_Options AddResponsesToQuestions={AddResponsesToQuestions} ques={ques} index={i}/>
+                                                                    </div>
+                                                                    :
+                                                                    <div>
+                                                                        <Attemp_Question index={i} AddResponsesToQuestions={AddResponsesToQuestions} questionType={ques.questionType} />
+                                                                    </div>
+                                                            }
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    )
-                                }
+                                            )
+                                        :""}
+
                             </div>
                             <br />
                             <div>
                                 <div className="col-md-12 text-center">
-                                    <button type="button" className="btn btn-primary">Submit</button>
+                                    <button type="button" className="btn btn-primary" onClick={() => {SubmitHandler()}}>Submit</button>
                                     &nbsp;&nbsp;
-                                    <button type="button" className="btn btn-warning">Cancel</button>
+                                    <button type="button" className="btn btn-warning" onClick={() => {cancelPage()}} >Cancel</button>
                                 </div>
                             </div>
                         </div>
 
-                } */}
+                }
             </div>
         </div>
     )

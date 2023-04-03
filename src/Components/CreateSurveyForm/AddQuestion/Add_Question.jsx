@@ -27,7 +27,7 @@ export default function Add_Question({question,index,changeQuestionDescription,c
     const handleSelection = (e) => {
         setselectedOption(e.target.value);
         let optselcted = e.target.value;
-        if (optselcted === "radio" || optselcted === "check") {
+        if (optselcted === "radio" || optselcted === "checkbox") {
             setoptionsReq(true);
             setoptions(["", "", "", ""])
         }
@@ -89,10 +89,10 @@ export default function Add_Question({question,index,changeQuestionDescription,c
                         <option value="email">Email</option>
                         <option value="number">Number</option>
                         <option value="radio">Radio Box</option>
-                        <option value="check">Check box</option>
+                        <option value="checkbox">checkbox</option>
                         <option value="date">Date</option>
                         <option value="url">URL</option>
-                        <option value="file">file</option>
+                        {/* <option value="file">file</option> */}
                     </select>
                 </div>
                 <div>

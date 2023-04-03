@@ -14,3 +14,18 @@ export function getOneSurveyDetails(id)
 {
     return axios.get(`http://localhost:9000/survey/getSurvey/${id}`);
 }
+
+export function deleteSurveyDetail(id)
+{
+    return axios.delete(`http://localhost:9000/survey/delete/${id}`)
+}
+
+export function changeActiveStatus(id, active)
+{
+    return axios.put(`http://localhost:9000/survey/updateActive/${id}/${active}`)
+}
+
+export function UpdateSurveyByFillingByUsers(id, data)
+{
+    return axios.put(`http://localhost:9000/survey/update/${id}`,data);
+}

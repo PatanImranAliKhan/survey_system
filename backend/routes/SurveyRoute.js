@@ -36,7 +36,7 @@ surveyRouter.route("/getServeyDetailsList/:email").get(async(req,res,next) => {
         response['surveyDetailsOfUser'] = [];
     })
 
-    await SurveyModel.find({ createdBy: { $ne: email }})
+    await SurveyModel.find({ createdBy: { $ne: email }, isActive: true})
     .then((resp) => {
         response['surveyDetailsOfOthers'] = resp;
     })
@@ -52,10 +52,9 @@ surveyRouter.route("/getServeyDetailsList/:email").get(async(req,res,next) => {
 surveyRouter.route("/getSurvey/:id").get(async(req,res,next) => {
     await SurveyModel.findById(req.params.id)
     .then((resp) => {
-        console.log("response: "+resp);
         res.json({
             "status": "Success",
-            "details": [resp]
+            "details": resp
         })
     })
     .catch((err) => {
@@ -63,7 +62,7 @@ surveyRouter.route("/getSurvey/:id").get(async(req,res,next) => {
         console.log(err);
         res.json({
             "status": "Failed",
-            "details": []
+            "details": {}
         })
     })
 })
@@ -90,7 +89,6 @@ surveyRouter.route("/update/:id").put(async(req,res,next) => {
 })
 
 surveyRouter.route("/updateActive/:id/:active").put(async(req,res,next) => {
-    console.log("active");
     console.log(req.params.active);
     await SurveyModel.findByIdAndUpdate(req.params.id, {
         isActive: req.params.active

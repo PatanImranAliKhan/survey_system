@@ -73,31 +73,31 @@ export default function Create_Form() {
     }
 
     const AddNewQuestion = () => {
-        const dup_ques = [...questionsList];
+        var dup_ques = [...questionsList];
         dup_ques.push(sampleQuestion)
         setquestionsList(dup_ques);
     }
 
     const changeQuestionDescription = (ind, val) => {
-        const dup_ques = questionsList;
+        var dup_ques = questionsList;
         dup_ques[ind].description = val;
         setquestionsList(dup_ques)
     }
 
     const changeQuestionOptions = (ind, arr) => {
-        const dup_ques = questionsList;
+        var dup_ques = questionsList;
         dup_ques[ind].options = arr;
         setquestionsList(dup_ques)
     }
 
     const changeQuestionType = (ind, val) => {
-        const dup_ques = questionsList;
+        var dup_ques = questionsList;
         dup_ques[ind].questionType = val;
         setquestionsList(dup_ques)
     }
 
     const deleteQuestion = (ind) => {
-        const result = questionsList.filter(function (item, i) {
+        var result = questionsList.filter(function (item, i) {
             return i != ind
         })
         setquestionsList([]);
@@ -107,7 +107,7 @@ export default function Create_Form() {
     const filterOptions = (ques_dup) => {
         var filtered_result = []
         ques_dup.forEach((element) => {
-            if (element.questionType == "radio" || element.questionType == "check") {
+            if (element.questionType == "radio" || element.questionType == "checkbox") {
                 element.options = element.options.filter((item) => {
                     return item != ""
                 })
@@ -119,16 +119,7 @@ export default function Create_Form() {
 
     const Add_options_as_Constraints = (ques) => {
         ques.map((item) => {
-            var survey_response = {};
-            if (item.questionType == "radio" || item.questionType == "check") {
-                item.options.forEach((element) => {
-                    survey_response[element] = 0;
-                })
-            }
-            else {
-                survey_response['responses'] = [];
-            }
-            item['survey_response'] = survey_response;
+            item['survey_response'] = [];
             return item;
         })
         return ques
@@ -175,6 +166,7 @@ export default function Create_Form() {
                 setsuccessmessage("Submitted Succesfully");
                 seterrormessage("")
                 setquestionsList(sampleQuestion);
+                navigate("/survey_list")
             }
             else
             {
@@ -239,11 +231,12 @@ export default function Create_Form() {
                 </div>
                 <div>
                     {
+                        questionsList.length!=0 ?
                         questionsList.map((ques, i) =>
                             <Add_Question key={i} changeQuestionDescription={changeQuestionDescription} index={i} question={ques}
                                 changeQuestionOptions={changeQuestionOptions} changeQuestionType={changeQuestionType}
                                 deleteQuestion={deleteQuestion} />
-                        )
+                        ):""
                     }
                 </div>
                 <br />

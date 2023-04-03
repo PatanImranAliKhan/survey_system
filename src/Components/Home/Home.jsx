@@ -32,7 +32,7 @@ export default function Home() {
         </div>
         <br />
           <hr />
-        <div className='home_content row'>
+        {/* <div className='home_content row'>
           <div className='homecontentforsurvey col-lg-6 col-sm-6 h-100'>
             <div className='display_box_survey' onClick={() => { navigateToCreateSurvey() }}>
               <i className='fa fa-plus' aria-hidden="true"></i>
@@ -46,7 +46,7 @@ export default function Home() {
             </div>
             <h4><Link className='contentlink' to="/create_survey">Create Quiz</Link></h4>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )
