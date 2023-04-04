@@ -63,7 +63,7 @@ export default function Attemp_Survey() {
     const descriptionRef = useRef();
 
     const AddResponsesToQuestions = (ind, answer) => {
-        const dup_resp = [... responses]
+        var dup_resp = [... responses]
         dup_resp[ind]=answer;
         setresponses(dup_resp);
     }

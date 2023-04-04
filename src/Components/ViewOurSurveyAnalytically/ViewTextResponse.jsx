@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react'
 
-export default function ViewTextResponse({ Responses }) {
+export default function ViewTextResponse({ Responses, index }) {
+
+    const [resp, setresp] = useState([])
+    const modaltabledataId1 ="#"+index+"";
+    const modaltabledataId2 = ""+index+"" 
 
     useEffect(() => {
-        console.log(Responses);
-    }, [])
-
+        console.log(Responses[index]);
+        setresp(Responses[index]);
+    }, []);
 
     return (
         <div>
             <div>
-                <button type="button" className="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">
+                <button type="button" className="btn btn-secondary" data-toggle="modal" data-target={modaltabledataId1} >
                     View Responses
                 </button>
             </div>
-            <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div className="modal fade" id={modaltabledataId2} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -25,11 +29,12 @@ export default function ViewTextResponse({ Responses }) {
                         </div>
                         <div className="modal-body">
                             <div>
+                                {resp}
                                 {
-                                    Responses ? 
+                                    resp ? 
                                     <div>
                                         {
-                                            Responses.map((data, i) => {
+                                            resp.map((data, i) => {
                                                 return <div>
                                                     <label>{data}</label>
                                                     <br />

@@ -10,7 +10,18 @@ export default function ViewSurveyAnalytical() {
 
     const { id_data } = useParams();
 
-    const [surveyDetails, setsurveyDetails] = useState([]);
+    const sample_survey = {
+        createdBy: "survey@gmail.com",
+        dateOfCreation: new Date(),
+        dateOfExpiry: new Date(),
+        description: "decription",
+        isActive: true,
+        questions: [],
+        title: "title",
+        _id: "1234"
+    }
+
+    const [surveyDetails, setsurveyDetails] = useState(sample_survey);
     const [surveyAnalyticalresult, setsurveyAnalyticalresult] = useState();
     const [isActive, setisActive] = useState(true);
 
@@ -22,15 +33,12 @@ export default function ViewSurveyAnalytical() {
         getSurveyDetailsfromDB();
     }, [])
 
-    async function getSurveyDetailsfromDB() {
-        await getOneSurveyDetails(id_data)
+    function getSurveyDetailsfromDB() {
+        getOneSurveyDetails(id_data)
             .then((resp) => {
                 setsurveyDetails(resp.data.details);
-                setTimeout(() => {
-                    console.log(resp.data.details);
-                    ExtractAnalyticdata(resp.data.details);
-                    setisActive(resp.data.details.isActive);
-                }, 100);
+                ExtractAnalyticdata(resp.data.details);
+                setisActive(resp.data.details.isActive);
             })
             .catch((err) => {
                 console.log("error analytically : ", err);
@@ -149,7 +157,7 @@ export default function ViewSurveyAnalytical() {
                                     {
                                         surveyDetails.questions != "" && surveyDetails.questions != null && surveyDetails.questions != [] && surveyDetails.questions != undefined ?
                                             surveyDetails.questions.map((ques, i) =>
-                                                <div>
+                                                <div key={i}>
                                                     <b>Question : {i + 1}</b>
                                                     <div className='questionbox'>
                                                         <b>Question Description: </b>
@@ -163,11 +171,11 @@ export default function ViewSurveyAnalytical() {
                                                             {
                                                                 ques.questionType == "radio" || ques.questionType == "checkbox" ?
                                                                     <div className='form-group'>
-                                                                        <ViewAnalyticalresponse Responses={surveyAnalyticalresult[i]} />
+                                                                        <ViewAnalyticalresponse Responses={surveyAnalyticalresult} index={i} />
                                                                     </div>
                                                                     :
                                                                     <div>
-                                                                        <ViewTextResponse Responses={surveyAnalyticalresult[i]}/>
+                                                                        <ViewTextResponse Responses={surveyAnalyticalresult} index={i}/>
                                                                     </div>
                                                             }
                                                         </div>
