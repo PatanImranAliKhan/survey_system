@@ -3,7 +3,6 @@ import { getAllSurveyDetails } from '../Service/survey_service';
 import Header from '../Header/Header';
 import './surveylist.css';
 import { useNavigate } from "react-router-dom";
-import CryptoJS from 'crypto-js';
 
 export default function Survey_List() {
 
@@ -32,6 +31,10 @@ export default function Survey_List() {
 
     const clickCreateForm = () => {
         navigate("/create_survey")
+    }
+
+    const navigateToAnalyticsLink = (id) => {
+        navigate(`/viewsurvey/${id}`);
     }
 
     const navigateToLink = (id) => {
@@ -73,7 +76,7 @@ export default function Survey_List() {
                                                 <tr>
                                                     <th scope="row">{ind + 1}</th>
                                                     <td>{data.title}</td>
-                                                    <td onClick={() => { navigateToLink(data._id) }}><i class="fa fa-external-link-square" aria-hidden="true"></i></td>
+                                                    <td onClick={() => { navigateToAnalyticsLink(data._id) }}><i class="fa fa-external-link-square" aria-hidden="true"></i></td>
                                                 </tr>
                                             </tbody>
                                         })

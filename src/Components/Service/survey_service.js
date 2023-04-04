@@ -20,9 +20,9 @@ export function deleteSurveyDetail(id)
     return axios.delete(`http://localhost:9000/survey/delete/${id}`)
 }
 
-export function changeActiveStatus(id, active)
+export function changeActiveStatus(id, active, expiry_data)
 {
-    return axios.put(`http://localhost:9000/survey/updateActive/${id}/${active}`)
+    return axios.put(`http://localhost:9000/survey/updateActive/${id}/${active}/${expiry_data}`)
 }
 
 export function UpdateSurveyByFillingByUsers(id, data)

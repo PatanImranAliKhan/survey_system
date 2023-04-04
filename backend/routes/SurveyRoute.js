@@ -90,10 +90,11 @@ surveyRouter.route("/update/:id").put(async(req,res,next) => {
     })
 })
 
-surveyRouter.route("/updateActive/:id/:active").put(async(req,res,next) => {
+surveyRouter.route("/updateActive/:id/:active/:expiry_data").put(async(req,res,next) => {
     console.log(req.params.active);
     await SurveyModel.findByIdAndUpdate(req.params.id, {
-        isActive: req.params.active
+        isActive: req.params.active,
+        dateOfExpiry: req.params.expiry_data
     })
     .then((resp) => {
         console.log("SuccessFully updated");

@@ -5,6 +5,7 @@ import Create_Form from './Components/CreateSurveyForm/Create_Form';
 import Home from './Components/Home/Home';
 import Survey_List from './Components/SurveyList/Survey_List';
 import Attemp_Survey from './Components/AttempSurvey/Attemp_Survey';
+import ViewSurveyAnalytical from './Components/ViewOurSurveyAnalytically/ViewSurveyAnalytical';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route exact path='/create_survey' element={<Create_Form/>}></Route>
             <Route exact path='/survey_list' element={<Survey_List/>}></Route>
             <Route exact path='/attempSurvey/:id_data' element={<Attemp_Survey/>}></Route>
+            <Route exact path='/viewsurvey/:id_data' element={<ViewSurveyAnalytical/>}></Route>
           </Routes>
       </BrowserRouter>
     </div>
