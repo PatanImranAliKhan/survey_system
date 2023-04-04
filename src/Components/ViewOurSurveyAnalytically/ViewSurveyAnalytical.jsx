@@ -159,18 +159,21 @@ export default function ViewSurveyAnalytical() {
                                                         </label>
                                                         <br />
                                                         <b>Responses: </b>
+                                                        {surveyAnalyticalresult?
                                                         <div>
                                                             {
+                                                                
                                                                 ques.questionType == "radio" || ques.questionType == "checkbox" ?
                                                                     <div className='form-group'>
-                                                                        <ViewAnalyticalresponse Responses={surveyAnalyticalresult[i]} />
+                                                                        <ViewAnalyticalresponse key={i} options={ques.options} Responses={surveyAnalyticalresult[i]} />
                                                                     </div>
                                                                     :
                                                                     <div>
-                                                                        <ViewTextResponse Responses={surveyAnalyticalresult[i]}/>
+                                                                        <ViewTextResponse key={i} Responses={surveyAnalyticalresult[i]}/>
                                                                     </div>
                                                             }
-                                                        </div>
+                                                        </div>:'Loading.....'
+                                                        }
                                                     </div>
                                                 </div>
                                             )
