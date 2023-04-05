@@ -48,7 +48,10 @@ export default function Create_Form() {
 
     useEffect(() => {
         const user_local_details = JSON.parse(localStorage.getItem('userdetails'));
-        setuserDetails(user_local_details)
+        if (user_local_details == null || user_local_details == "") {
+            navigate("/")
+        }
+        setuserDetails(user_local_details);
     }, [])
     
 
@@ -181,7 +184,7 @@ export default function Create_Form() {
     }
 
     const cancelForm = () => {
-        navigate("/")
+        navigate(-1);
     }
 
     return (

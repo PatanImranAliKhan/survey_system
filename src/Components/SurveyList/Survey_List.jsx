@@ -13,6 +13,9 @@ export default function Survey_List() {
 
     useEffect(() => {
         const user_local_details = JSON.parse(localStorage.getItem('userdetails'));
+        if (user_local_details == null || user_local_details == "") {
+            navigate("/")
+        }
         getSurveyDetail(user_local_details.email);
     }, [])
 

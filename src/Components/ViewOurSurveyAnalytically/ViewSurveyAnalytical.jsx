@@ -171,7 +171,7 @@ export default function ViewSurveyAnalytical() {
                                                             {
                                                                 ques.questionType == "radio" || ques.questionType == "checkbox" ?
                                                                     <div className='form-group'>
-                                                                        <ViewAnalyticalresponse Responses={surveyAnalyticalresult} index={i} />
+                                                                        <ViewAnalyticalresponse Responses={surveyAnalyticalresult} index={i} options={ques.options} />
                                                                     </div>
                                                                     :
                                                                     <div>

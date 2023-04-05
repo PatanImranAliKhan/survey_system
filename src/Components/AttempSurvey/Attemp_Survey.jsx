@@ -18,6 +18,10 @@ export default function Attemp_Survey() {
     var navigate = useNavigate();
 
     useEffect(() => {
+        const user_local_details = JSON.parse(localStorage.getItem('userdetails'));
+        if (user_local_details == null || user_local_details == "") {
+            navigate("/")
+        }
         setsurveyId(id_data);
         getSurveyDetailsFormDB();
     }, [])
@@ -90,6 +94,7 @@ export default function Attemp_Survey() {
         UpdateSurveyByFillingByUsers(surveyDetails._id, ques)
         .then((resp) => {
             console.log(resp);
+            navigate("/survey_list");
         })
         .catch((err) => {
             console.log("err");
