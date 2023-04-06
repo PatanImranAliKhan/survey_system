@@ -3,6 +3,7 @@ import '../authenticate.css'
 import { Link } from 'react-router-dom';
 import { PostUserDetails } from '../Service/AuthenticationService';
 import { useNavigate } from "react-router-dom";
+import backgroundimage from '../backgroundimage.jpg';
 
 export default function Register() {
   const [username, setusername] = useState("")
@@ -143,7 +144,7 @@ export default function Register() {
   }
 
   return (
-    <div>
+    <div style={{'backgroundImage': `url(${backgroundimage})`, height: '100vh'}}>
       {
         Errormessage ?
           <div>
@@ -160,6 +161,7 @@ export default function Register() {
             </div>
           </div>
           : ""}
+      &nbsp;
       <div className="container">
         <div className="authform">
           <div className="userlogo">
@@ -223,7 +225,7 @@ export default function Register() {
             </div>
             <button className="btn btn-primary" type="submit" onClick={() => { SignupHandler() }}>Register</button>
             <p className="already">
-              Already have an account: <Link className="anchor" to="/" style={{ color: 'blue' }}>login</Link>
+              Already have an account: <Link className="anchor" to="/login" style={{ color: 'blue' }}>login</Link>
             </p>
           </div>
         </div>

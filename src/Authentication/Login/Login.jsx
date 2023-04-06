@@ -3,6 +3,7 @@ import '../authenticate.css'
 import { Link } from 'react-router-dom';
 import { CheckAdminCred, AuthenticateUser } from '../Service/AuthenticationService';
 import { useNavigate } from "react-router-dom";
+import backgroundimage from '../backgroundimage.jpg';
 
 export default function Login() {
 
@@ -91,7 +92,7 @@ export default function Login() {
 
 
   return (
-    <div>
+    <div style={{'backgroundImage': `url(${backgroundimage})`, height: '100vh'}}>
       {
         Errormessage ?
           <div>
@@ -109,6 +110,7 @@ export default function Login() {
           </div>
           : ""}
       <div className="container">
+        &nbsp;
         <div className="authform">
           <div className="userlogo">
             <i className="fa fa-user-circle" style={{ fontSize: '60px' }} aria-hidden="true"></i>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Header from '../Header/Header'
 import { useNavigate } from "react-router-dom";
 import './home.css'
-import analyze from './analyze.png';
+import my_project from './myproject.png';
 
 export default function Home() {
 
@@ -21,13 +21,13 @@ export default function Home() {
     <div>
       <Header />
       <div className='container'>
-        <div class="top">
-          <div class="leftcontent">
-            <span class="textLeftTop">Create your own Survey. <span class="specialTextOnline">ONLINE</span></span><br />
-            <span><span class="textLeftTopDown">... for Free.</span></span>
+        <div className="top">
+          <div className="leftcontent">
+            <span className="textLeftTop">Create your own Survey. <span className="specialTextOnline">ONLINE</span></span><br />
+            <span><span className="textLeftTopDown">... for Free.</span></span>
           </div>
-          <div class="rightimage">
-            <img class="image" style={{ borderRadius: '50%', width: '60%', height: '60%', marginLeft: '150px', marginTop: '100px' }} src={analyze} alt="doctor" />
+          <div className="rightimage">
+            <img className="image" style={{ width: '65%', height: '60%', marginLeft: '150px', marginTop: '100px' }} src={my_project} alt="doctor" />
           </div>
         </div>
         <br />
