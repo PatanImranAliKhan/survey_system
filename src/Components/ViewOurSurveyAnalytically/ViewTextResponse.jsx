@@ -29,7 +29,6 @@ export default function ViewTextResponse({ Responses, index }) {
                         </div>
                         <div className="modal-body">
                             <div>
-                                {resp}
                                 {
                                     resp ? 
                                     <div>
